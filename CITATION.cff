@@ -1,0 +1,50 @@
+cff-version: 1.2.0
+message: "If you use this specification, please cite it as below."
+
+title: "Proof-of-Existence License Protocol v0.1"
+
+abstract: >
+  The Proof-of-Existence License Protocol v0.1 defines a minimal
+  structural protocol for proving that a subject created, signed,
+  and anchored a trace at a specific time. It provides a trust layer
+  for verifying subjects, origins, signed traces, Merkle anchors,
+  and claim eligibility before external systems such as Kazene
+  Royalty OS evaluate contribution, trace weight, or royalty allocation.
+
+type: software
+version: "0.1.0"
+
+authors:
+  - name: "Shidenkai Alpha"
+    alias: "Kazene"
+
+repository-code: "https://github.com/SamuraiWriter7/proof-of-existence-license-v0.1"
+url: "https://github.com/SamuraiWriter7/proof-of-existence-license-v0.1"
+
+keywords:
+  - proof-of-existence
+  - digital-signature
+  - merkle-tree
+  - traceability
+  - provenance
+  - kazene
+  - royalty-os
+  - ai-governance
+  - contribution-tracking
+  - origin-verification
+  - license-protocol
+  - zero-knowledge-proof
+
+license: "CC-BY-4.0"
+
+date-released: "2026-04-25"
+
+preferred-citation:
+  type: generic
+  title: "Proof-of-Existence License Protocol v0.1"
+  authors:
+    - name: "Shidenkai Alpha"
+      alias: "Kazene"
+  version: "0.1.0"
+  year: 2026
+  url: "https://github.com/SamuraiWriter7/proof-of-existence-license-v0.1"
