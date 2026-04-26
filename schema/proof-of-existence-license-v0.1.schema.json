@@ -1,0 +1,415 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kazene.org/schema/proof-of-existence-license-v0.1.schema.json",
+  "title": "Proof-of-Existence License Protocol v0.1",
+  "description": "JSON Schema for validating Proof-of-Existence License records, signed traces, Merkle anchors, and contribution claims.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "protocol",
+    "license_certificate",
+    "trace_record",
+    "merkle_anchor_record",
+    "merkle_inclusion_proof",
+    "claim"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "abbreviation",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "const": "proof-of-existence-license-protocol"
+        },
+        "name": {
+          "type": "string",
+          "const": "Proof-of-Existence License Protocol"
+        },
+        "abbreviation": {
+          "type": "string",
+          "const": "PoEL"
+        },
+        "version": {
+          "type": "string",
+          "const": "0.1"
+        }
+      }
+    },
+    "license_certificate": {
+      "$ref": "#/$defs/license_certificate"
+    },
+    "trace_record": {
+      "$ref": "#/$defs/trace_record"
+    },
+    "merkle_anchor_record": {
+      "$ref": "#/$defs/merkle_anchor_record"
+    },
+    "merkle_inclusion_proof": {
+      "$ref": "#/$defs/merkle_inclusion_proof"
+    },
+    "claim": {
+      "$ref": "#/$defs/claim"
+    },
+    "verification_result": {
+      "$ref": "#/$defs/verification_result"
+    }
+  },
+  "$defs": {
+    "id_string": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-zA-Z0-9._:-]+$"
+    },
+    "hash_string": {
+      "type": "string",
+      "pattern": "^(sha256|sha3-256|blake3):[a-zA-Z0-9]+$"
+    },
+    "signature_string": {
+      "type": "string",
+      "pattern": "^(ed25519|secp256k1|rsa-pss):[a-zA-Z0-9._:-]+$"
+    },
+    "public_key_string": {
+      "type": "string",
+      "pattern": "^(ed25519|secp256k1|rsa-pss):[a-zA-Z0-9._:-]+$"
+    },
+    "datetime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "nullable_datetime": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/datetime"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "license_certificate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "license_id",
+        "subject_id",
+        "subject_type",
+        "public_key",
+        "key_algorithm",
+        "issued_at",
+        "expires_at",
+        "issuer_id",
+        "issuer_signature",
+        "status"
+      ],
+      "properties": {
+        "license_id": {
+          "$ref": "#/$defs/id_string"
+        },
+        "subject_id": {
+          "$ref": "#/$defs/id_string"
+        },
+        "subject_type": {
+          "type": "string",
+          "enum": [
+            "human",
+            "ai_agent",
+            "organization",
+            "collective",
+            "system"
+          ]
+        },
+        "public_key": {
+          "$ref": "#/$defs/public_key_string"
+        },
+        "key_algorithm": {
+          "type": "string",
+          "enum": [
+            "ed25519",
+            "secp256k1",
+            "rsa-pss"
+          ]
+        },
+        "issued_at": {
+          "$ref": "#/$defs/datetime"
+        },
+        "expires_at": {
+          "$ref": "#/$defs/nullable_datetime"
+        },
+        "issuer_id": {
+          "$ref": "#/$defs/id_string"
+        },
+        "issuer_signature": {
+          "$ref": "#/$defs/signature_string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "suspended",
+            "revoked",
+            "expired",
+            "recovered"
+          ]
+        }
+      }
+    },
+    "trace_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trace_id",
+        "trace_type",
+        "trace_hash",
+        "hash_algorithm",
+        "created_at",
+        "signed_at",
+        "signed_by",
+        "license_id",
+        "signature",
+        "visibility"
+      ],
+      "properties": {
+        "trace_id": {
+          "$ref": "#/$defs/id_string"
+        },
+        "trace_type": {
+          "type": "string",
+          "enum": [
+            "prompt",
+            "output",
+            "code",
+            "document",
+            "revision",
+            "dataset_reference",
+            "design",
+            "specification",
+            "decision",
+            "interaction",
+            "other"
+          ]
+        },
+        "trace_hash": {
+          "$ref": "#/$defs/hash_string"
+        },
+        "hash_algorithm": {
+          "type": "string",
+          "enum": [
+            "sha256",
+            "sha3-256",
+            "blake3"
+          ]
+        },
+        "created_at": {
+          "$ref": "#/$defs/datetime"
+        },
+        "signed_at": {
+          "$ref": "#/$defs/datetime"
+        },
+        "signed_by": {
+          "$ref": "#/$defs/id_string"
+        },
+        "license_id": {
+          "$ref": "#/$defs/id_string"
+        },
+        "signature": {
+          "$ref": "#/$defs/signature_string"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": [
+            "public",
+            "private",
+            "encrypted",
+            "hash_only"
+          ]
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "merkle_anchor_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "anchor_id",
+        "merkle_root",
+        "tree_algorithm",
+        "hash_algorithm",
+        "anchored_at",
+        "ledger_type",
+        "ledger_ref",
+        "included_trace_count"
+      ],
+      "properties": {
+        "anchor_id": {
+          "$ref": "#/$defs/id_string"
+        },
+        "merkle_root": {
+          "$ref": "#/$defs/hash_string"
+        },
+        "tree_algorithm": {
+          "type": "string",
+          "enum": [
+            "binary_merkle_tree",
+            "sparse_merkle_tree"
+          ]
+        },
+        "hash_algorithm": {
+          "type": "string",
+          "enum": [
+            "sha256",
+            "sha3-256",
+            "blake3"
+          ]
+        },
+        "anchored_at": {
+          "$ref": "#/$defs/datetime"
+        },
+        "ledger_type": {
+          "type": "string",
+          "enum": [
+            "public_blockchain",
+            "private_ledger",
+            "transparency_log",
+            "timestamping_service",
+            "git_commit",
+            "other"
+          ]
+        },
+        "ledger_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "included_trace_count": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "merkle_inclusion_proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trace_hash",
+        "merkle_root",
+        "proof_path",
+        "proof_verified"
+      ],
+      "properties": {
+        "trace_hash": {
+          "$ref": "#/$defs/hash_string"
+        },
+        "merkle_root": {
+          "$ref": "#/$defs/hash_string"
+        },
+        "proof_path": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/hash_string"
+          }
+        },
+        "proof_verified": {
+          "type": "boolean"
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "claim_type",
+        "subject_id",
+        "license_id",
+        "trace_id",
+        "merkle_root",
+        "claim_status"
+      ],
+      "properties": {
+        "claim_id": {
+          "$ref": "#/$defs/id_string"
+        },
+        "claim_type": {
+          "type": "string",
+          "enum": [
+            "contribution_claim",
+            "origin_claim",
+            "authorship_claim",
+            "royalty_claim",
+            "privacy_preserving_claim"
+          ]
+        },
+        "subject_id": {
+          "$ref": "#/$defs/id_string"
+        },
+        "license_id": {
+          "$ref": "#/$defs/id_string"
+        },
+        "trace_id": {
+          "$ref": "#/$defs/id_string"
+        },
+        "merkle_root": {
+          "$ref": "#/$defs/hash_string"
+        },
+        "claim_status": {
+          "type": "string",
+          "enum": [
+            "pending_verification",
+            "verified",
+            "rejected",
+            "revoked"
+          ]
+        },
+        "claim_note": {
+          "type": "string"
+        }
+      }
+    },
+    "verification_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "license_verified",
+        "signature_verified",
+        "merkle_inclusion_verified",
+        "claim_eligible"
+      ],
+      "properties": {
+        "license_verified": {
+          "type": "boolean"
+        },
+        "signature_verified": {
+          "type": "boolean"
+        },
+        "merkle_inclusion_verified": {
+          "type": "boolean"
+        },
+        "claim_eligible": {
+          "type": "boolean"
+        },
+        "verified_at": {
+          "$ref": "#/$defs/datetime"
+        },
+        "verifier_id": {
+          "$ref": "#/$defs/id_string"
+        }
+      }
+    }
+  }
+}
