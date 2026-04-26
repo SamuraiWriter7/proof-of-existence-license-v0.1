@@ -81,3 +81,7 @@ jobs:
           print(f"- Schema: {schema_path}")
           print(f"- Sample: {sample_path}")
           PY
+
+                - name: Run compliance tests
+        run: |
+          python tests/run-compliance-tests.py
