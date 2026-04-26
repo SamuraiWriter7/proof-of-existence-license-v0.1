@@ -148,24 +148,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
-実行コマンド
-python -m pip install jsonschema
-python tests/run-compliance-tests.py
-
-期待される出力イメージ：
-
-== PASS examples ==
-[PASS] examples/pass/valid-ai-agent-git-anchor.json
-[PASS] examples/pass/valid-human-basic.json
-
-== FAIL examples ==
-[PASS] Expected failure detected: examples/fail/invalid-hash-format.json
-  - trace_record.trace_hash: 'sha256-badhashformat001' does not match '^(sha256|sha3-256|blake3):[a-zA-Z0-9]+$'
-[PASS] Expected failure detected: examples/fail/invalid-subject-type.json
-  - license_certificate.subject_type: 'ghost' is not one of ['human', 'ai_agent', 'organization', 'collective', 'system']
-[PASS] Expected failure detected: examples/fail/missing-trace-signature.json
-  - trace_record: 'signature' is a required property
-
-== Summary ==
-All compliance tests passed.
