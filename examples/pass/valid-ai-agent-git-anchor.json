@@ -1,0 +1,67 @@
+{
+  "schema_version": "0.1",
+  "protocol": {
+    "id": "proof-of-existence-license-protocol",
+    "name": "Proof-of-Existence License Protocol",
+    "abbreviation": "PoEL",
+    "version": "0.1"
+  },
+  "license_certificate": {
+    "license_id": "poel-license-agent-001",
+    "subject_id": "kazene-agent-001",
+    "subject_type": "ai_agent",
+    "public_key": "secp256k1:agent_public_key_001",
+    "key_algorithm": "secp256k1",
+    "issued_at": "2026-04-25T02:00:00Z",
+    "expires_at": "2027-04-25T02:00:00Z",
+    "issuer_id": "kazene-proof-of-existence-os",
+    "issuer_signature": "secp256k1:issuer_signature_agent_001",
+    "status": "active"
+  },
+  "trace_record": {
+    "trace_id": "trace-agent-001",
+    "trace_type": "code",
+    "trace_hash": "blake3:agenttracehash001",
+    "hash_algorithm": "blake3",
+    "created_at": "2026-04-25T02:10:00Z",
+    "signed_at": "2026-04-25T02:11:00Z",
+    "signed_by": "kazene-agent-001",
+    "license_id": "poel-license-agent-001",
+    "signature": "secp256k1:agent_trace_signature_001",
+    "visibility": "private",
+    "metadata": {
+      "repository": "example/repo",
+      "event": "code_generation"
+    }
+  },
+  "merkle_anchor_record": {
+    "anchor_id": "anchor-agent-001",
+    "merkle_root": "blake3:agentmerkleroot001",
+    "tree_algorithm": "sparse_merkle_tree",
+    "hash_algorithm": "blake3",
+    "anchored_at": "2026-04-25T03:00:00Z",
+    "ledger_type": "git_commit",
+    "ledger_ref": "git:abcdef1234567890",
+    "included_trace_count": 64
+  },
+  "merkle_inclusion_proof": {
+    "trace_hash": "blake3:agenttracehash001",
+    "merkle_root": "blake3:agentmerkleroot001",
+    "proof_path": [
+      "blake3:agentproofnode001",
+      "blake3:agentproofnode002",
+      "blake3:agentproofnode003"
+    ],
+    "proof_verified": true
+  },
+  "claim": {
+    "claim_id": "claim-agent-001",
+    "claim_type": "royalty_claim",
+    "subject_id": "kazene-agent-001",
+    "license_id": "poel-license-agent-001",
+    "trace_id": "trace-agent-001",
+    "merkle_root": "blake3:agentmerkleroot001",
+    "claim_status": "pending_verification",
+    "claim_note": "A valid AI agent trace claim anchored through a Git commit."
+  }
+}
