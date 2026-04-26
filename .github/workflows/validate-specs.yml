@@ -1,0 +1,83 @@
+name: Validate Specs
+
+on:
+  push:
+    paths:
+      - ".github/workflows/validate-specs.yml"
+      - "schema/**"
+      - "examples/**"
+  pull_request:
+    paths:
+      - ".github/workflows/validate-specs.yml"
+      - "schema/**"
+      - "examples/**"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install validation dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install jsonschema
+
+      - name: Debug file tree
+        run: |
+          pwd
+          find . -maxdepth 4 -type f | sort
+
+      - name: Validate Proof-of-Existence License sample
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from jsonschema import Draft202012Validator, FormatChecker
+
+          schema_path = Path("schema/proof-of-existence-license-v0.1.schema.json")
+          sample_path = Path("examples/proof-of-existence-license.sample.json")
+
+          if not schema_path.exists():
+              raise FileNotFoundError(f"Schema file not found: {schema_path}")
+
+          if not sample_path.exists():
+              raise FileNotFoundError(f"Sample file not found: {sample_path}")
+
+          with schema_path.open("r", encoding="utf-8") as f:
+              schema = json.load(f)
+
+          with sample_path.open("r", encoding="utf-8") as f:
+              sample = json.load(f)
+
+          validator = Draft202012Validator(
+              schema,
+              format_checker=FormatChecker()
+          )
+
+          errors = sorted(
+              validator.iter_errors(sample),
+              key=lambda e: list(e.path)
+          )
+
+          if errors:
+              print("Validation failed:")
+              for error in errors:
+                  path = ".".join(str(p) for p in error.path)
+                  if not path:
+                      path = "<root>"
+                  print(f"- {path}: {error.message}")
+              raise SystemExit(1)
+
+          print("Validation passed:")
+          print(f"- Schema: {schema_path}")
+          print(f"- Sample: {sample_path}")
+          PY
