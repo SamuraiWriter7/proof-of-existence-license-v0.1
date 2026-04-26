@@ -1,0 +1,746 @@
+id: proof-of-existence-license-protocol-v0.1
+name: Proof-of-Existence License Protocol
+jp_name: 存在証明ライセンス・プロトコル
+abbreviation: PoEL
+version: "0.1"
+status: draft
+created_at: "2026-04-25"
+maintainer: Kazene Proof-of-Existence OS
+
+summary:
+  ja: >
+    存在証明ライセンス・プロトコルは、主体が残した痕跡に対して
+    署名・ハッシュ・時刻・検証情報を付与し、
+    「誰が・いつ・何を存在させたか」を証明するための
+    最小プロトコルである。
+    本プロトコルは、印税OSにおける寄与度推定・痕跡重み付け・
+    分配可能性計算の前提となる信頼基盤として機能する。
+
+  en: >
+    The Proof-of-Existence License Protocol defines a minimal structure
+    for proving that a subject created or left a trace at a certain time.
+    It combines identity, digital signatures, hashes, timestamps,
+    Merkle anchoring, and claim rules to provide a verifiable foundation
+    for contribution estimation, trace weighting, and royalty allocation.
+
+purpose:
+  - Prove the existence of a subject within the protocol.
+  - Prove that a trace was signed by a valid subject.
+  - Prove that a trace existed at a specific point in time.
+  - Preserve privacy by storing hashes instead of raw trace contents.
+  - Provide a verifiable foundation for contribution and royalty claims.
+  - Connect Proof-of-Existence OS with Kazene Royalty OS / 印税OS.
+
+scope:
+  included:
+    - subject registration
+    - public key binding
+    - license certificate issuance
+    - trace hash generation
+    - trace signature verification
+    - Merkle root anchoring
+    - contribution claim eligibility
+    - royalty claim eligibility
+    - revocation and recovery policy
+  excluded:
+    - direct monetary payment
+    - legal enforcement by itself
+    - final contribution scoring algorithm
+    - final royalty allocation formula
+    - full zero-knowledge proof implementation
+
+core_principle:
+  ja: >
+    存在証明ライセンスは、分配そのものを行う仕組みではない。
+    それは、分配の前提となる「主体・起源・痕跡の真正性」を保証する
+    信頼レイヤーである。
+
+  en: >
+    The Proof-of-Existence License does not distribute value by itself.
+    It provides the trust layer that verifies the authenticity of subjects,
+    origins, and traces before contribution or royalty systems operate.
+
+architecture:
+  layer_position:
+    below:
+      - Kazene Royalty OS
+      - 印税OS
+      - Contribution Estimation Layer
+      - Trace Weighting Layer
+      - Royalty Simulation Layer
+    above:
+      - cryptographic primitives
+      - signature infrastructure
+      - hash functions
+      - timestamping services
+      - distributed verification ledgers
+
+  layered_model:
+    - layer_id: certificate_layer
+      name: Certificate Layer
+      role: >
+        Registers a subject and binds the subject to a public key
+        and license identifier.
+
+    - layer_id: signature_layer
+      name: Signature Layer
+      role: >
+        Allows the registered subject to sign trace hashes,
+        proving authorship or participation.
+
+    - layer_id: anchor_layer
+      name: Anchor Layer
+      role: >
+        Aggregates trace hashes into a Merkle Tree and records
+        the Merkle Root to a tamper-resistant ledger.
+
+    - layer_id: claim_layer
+      name: Claim Layer
+      role: >
+        Allows the subject to claim contribution, ownership,
+        or royalty eligibility based on signed and anchored traces.
+
+    - layer_id: verification_layer
+      name: Verification Layer
+      role: >
+        Defines how third parties verify license validity,
+        signature correctness, trace inclusion, and claim eligibility.
+
+entities:
+  subject:
+    description: >
+      A human, AI agent, organization, or authorized entity that participates
+      in the Proof-of-Existence OS.
+    required_fields:
+      - subject_id
+      - subject_type
+      - public_key
+      - license_id
+      - registration_status
+
+  issuer:
+    description: >
+      The entity or protocol authority that issues the Proof-of-Existence License.
+    required_fields:
+      - issuer_id
+      - issuer_name
+      - issuer_public_key
+      - issuer_signature
+
+  verifier:
+    description: >
+      A third party that verifies the authenticity of licenses, signatures,
+      anchors, and claims.
+    required_fields:
+      - verifier_id
+      - verification_method
+
+  trace:
+    description: >
+      A hashed representation of an action, contribution, creative act,
+      prompt, code change, document revision, or other meaningful event.
+    required_fields:
+      - trace_id
+      - trace_hash
+      - trace_type
+      - created_at
+      - signed_by
+      - signature
+
+license_certificate:
+  description: >
+    A certificate that binds a subject to a public key and grants
+    the right to sign traces and make protocol-level claims.
+
+  required_fields:
+    license_id:
+      type: string
+      description: Unique identifier for the Proof-of-Existence License.
+
+    subject_id:
+      type: string
+      description: Unique identifier of the registered subject.
+
+    subject_type:
+      type: string
+      allowed_values:
+        - human
+        - ai_agent
+        - organization
+        - collective
+        - system
+      description: Type of the registered subject.
+
+    public_key:
+      type: string
+      description: Public key used to verify signatures from the subject.
+
+    key_algorithm:
+      type: string
+      recommended_values:
+        - ed25519
+        - secp256k1
+        - rsa-pss
+      description: Cryptographic algorithm used for subject signatures.
+
+    issued_at:
+      type: datetime
+      description: Time when the license was issued.
+
+    expires_at:
+      type: datetime_or_null
+      description: Optional expiration time.
+
+    issuer_id:
+      type: string
+      description: Identifier of the issuer.
+
+    issuer_signature:
+      type: string
+      description: Signature by the issuer over the license certificate.
+
+    status:
+      type: string
+      allowed_values:
+        - active
+        - suspended
+        - revoked
+        - expired
+        - recovered
+      description: Current status of the license.
+
+rights:
+  trace_signature_right:
+    description: >
+      The licensed subject may sign trace hashes using the private key
+      corresponding to the registered public key.
+
+  contribution_claim_right:
+    description: >
+      The licensed subject may claim contribution based on signed traces.
+
+  royalty_claim_right:
+    description: >
+      The licensed subject may claim royalty eligibility when the signed traces
+      are accepted by an external royalty or value-circulation system.
+
+  privacy_preservation_right:
+    description: >
+      The licensed subject may prove the existence and authorship of traces
+      without disclosing raw trace contents.
+
+  verification_request_right:
+    description: >
+      The licensed subject may request third-party verification of trace
+      signatures, Merkle inclusion, and license validity.
+
+limitations:
+  - The license does not automatically grant legal ownership.
+  - The license does not automatically calculate contribution value.
+  - The license does not automatically create monetary payment rights.
+  - The license does not replace copyright, contract, or statutory law.
+  - The license proves trace existence and signature validity, not moral merit.
+  - The license requires external systems to recognize its claims.
+
+trace_record:
+  description: >
+    A signed record proving that a subject created, modified, submitted,
+    or participated in a traceable event.
+
+  required_fields:
+    trace_id:
+      type: string
+      description: Unique identifier of the trace.
+
+    trace_type:
+      type: string
+      allowed_values:
+        - prompt
+        - output
+        - code
+        - document
+        - revision
+        - dataset_reference
+        - design
+        - specification
+        - decision
+        - interaction
+        - other
+      description: Type of trace.
+
+    trace_hash:
+      type: string
+      description: Cryptographic hash of the raw trace content.
+
+    hash_algorithm:
+      type: string
+      recommended_values:
+        - sha256
+        - sha3-256
+        - blake3
+      description: Algorithm used to hash the raw trace.
+
+    created_at:
+      type: datetime
+      description: Time when the trace was created.
+
+    signed_at:
+      type: datetime
+      description: Time when the trace hash was signed.
+
+    signed_by:
+      type: string
+      description: Subject ID of the signer.
+
+    license_id:
+      type: string
+      description: License used to sign the trace.
+
+    signature:
+      type: string
+      description: Digital signature over the trace hash and metadata.
+
+    visibility:
+      type: string
+      allowed_values:
+        - public
+        - private
+        - encrypted
+        - hash_only
+      description: Visibility level of the trace content.
+
+    metadata:
+      type: object
+      description: Optional contextual metadata.
+
+trace_hashing_rules:
+  raw_trace_policy:
+    store_raw_trace: optional
+    default_visibility: hash_only
+    privacy_first: true
+
+  canonicalization:
+    required: true
+    description: >
+      Trace content should be normalized before hashing to avoid
+      inconsistent hashes caused by formatting differences.
+
+  hash_input_fields:
+    recommended:
+      - subject_id
+      - trace_type
+      - raw_trace_content
+      - created_at
+      - context_reference
+
+  hash_output_format:
+    example: "sha256:abc123..."
+
+signature_rules:
+  signature_payload:
+    required_fields:
+      - trace_id
+      - trace_hash
+      - hash_algorithm
+      - subject_id
+      - license_id
+      - created_at
+      - signed_at
+
+  verification_requirements:
+    - The license status must be active at the time of signing.
+    - The public key must match the license certificate.
+    - The signature must verify against the trace hash and metadata.
+    - The trace timestamp must not conflict with the license validity period.
+
+merkle_anchor_record:
+  description: >
+    A record that anchors multiple trace hashes into a Merkle Tree,
+    allowing third parties to verify that a trace existed within a given batch.
+
+  required_fields:
+    anchor_id:
+      type: string
+      description: Unique identifier of the anchor record.
+
+    merkle_root:
+      type: string
+      description: Root hash of the Merkle Tree.
+
+    tree_algorithm:
+      type: string
+      recommended_values:
+        - binary_merkle_tree
+        - sparse_merkle_tree
+      description: Type of Merkle Tree used.
+
+    hash_algorithm:
+      type: string
+      recommended_values:
+        - sha256
+        - sha3-256
+        - blake3
+
+    anchored_at:
+      type: datetime
+      description: Time when the Merkle Root was anchored.
+
+    ledger_type:
+      type: string
+      allowed_values:
+        - public_blockchain
+        - private_ledger
+        - transparency_log
+        - timestamping_service
+        - git_commit
+        - other
+      description: Type of ledger used for anchoring.
+
+    ledger_ref:
+      type: string
+      description: Reference to the external ledger entry.
+
+    included_trace_count:
+      type: integer
+      description: Number of traces included in the Merkle Tree.
+
+merkle_inclusion_proof:
+  description: >
+    A proof showing that a trace hash is included in a Merkle Root.
+
+  required_fields:
+    trace_hash:
+      type: string
+
+    merkle_root:
+      type: string
+
+    proof_path:
+      type: array
+      description: List of sibling hashes needed to verify inclusion.
+
+    proof_verified:
+      type: boolean
+
+claim_policy:
+  description: >
+    Defines what claims a licensed subject may make based on signed
+    and anchored traces.
+
+  claim_types:
+    contribution_claim:
+      enabled: true
+      description: >
+        The subject may claim that a signed trace represents a contribution.
+
+    origin_claim:
+      enabled: true
+      description: >
+        The subject may claim that a signed trace represents an origin
+        or early source of a structure, idea, work, or action.
+
+    authorship_claim:
+      enabled: true
+      description: >
+        The subject may claim authorship of a trace when permitted
+        by surrounding legal and contractual frameworks.
+
+    royalty_claim:
+      enabled: true
+      description: >
+        The subject may claim eligibility for royalty calculation
+        when connected to an external royalty system.
+
+    privacy_preserving_claim:
+      enabled: true
+      zkp_required: false
+      description: >
+        The subject may claim participation without revealing raw trace content.
+        In v0.1, this may be done with hash and signature verification.
+        ZKP support is optional and reserved for later versions.
+
+  minimum_requirements:
+    - active_license
+    - valid_signature
+    - valid_trace_hash
+    - valid_timestamp
+    - merkle_inclusion_proof
+    - non_revoked_status
+
+verification_rules:
+  license_verification:
+    steps:
+      - Check license_id exists.
+      - Check license status is active.
+      - Verify issuer_signature.
+      - Verify subject public_key is bound to the license.
+      - Check issued_at and expires_at validity.
+
+  trace_verification:
+    steps:
+      - Recompute trace_hash if raw trace is available.
+      - Verify trace_hash format.
+      - Verify signature using subject public_key.
+      - Confirm signed_by matches subject_id.
+      - Confirm license_id matches registered license.
+      - Confirm trace timestamp falls within license validity period.
+
+  anchor_verification:
+    steps:
+      - Verify Merkle inclusion proof.
+      - Verify Merkle Root against anchor record.
+      - Verify anchor timestamp.
+      - Verify external ledger reference if available.
+
+  claim_verification:
+    steps:
+      - Verify license.
+      - Verify trace signature.
+      - Verify Merkle inclusion.
+      - Check revocation status.
+      - Check claim type is allowed.
+      - Forward verified claim to contribution or royalty system.
+
+revocation_policy:
+  description: >
+    Defines how a license or key may be revoked when compromised,
+    expired, invalidated, or replaced.
+
+  revocation_reasons:
+    - key_compromise
+    - subject_request
+    - issuer_decision
+    - fraudulent_activity
+    - duplicate_identity
+    - protocol_violation
+    - legal_order
+    - expiration
+
+  effects:
+    future_signing_disabled: true
+    past_traces_invalidated_by_default: false
+    requires_revocation_timestamp: true
+    requires_revocation_reason: true
+
+  past_trace_policy:
+    description: >
+      Past traces signed before revocation remain valid unless
+      there is evidence that the key was compromised before those traces
+      were signed.
+
+recovery_policy:
+  description: >
+    Defines how a subject may recover or rotate keys.
+
+  supported_recovery_methods:
+    - recovery_key
+    - multi_signature_guardian
+    - issuer_recovery
+    - hardware_key_backup
+    - social_recovery
+    - legal_identity_verification
+
+  key_rotation:
+    allowed: true
+    requires_old_key_signature: recommended
+    requires_issuer_confirmation: true
+
+  recovered_license_status:
+    previous_license_status: revoked
+    new_license_status: active
+    trace_continuity_preserved: true
+
+sybil_resistance:
+  description: >
+    Defines optional methods to reduce fake identity multiplication
+    and trace inflation.
+
+  optional_methods:
+    - proof_of_personhood
+    - organization_verification
+    - reputation_score
+    - rate_limiting
+    - stake_or_bond
+    - web_of_trust
+    - device_attestation
+    - issuer_approval
+    - anomaly_detection
+
+  default_policy:
+    strict_identity_required: false
+    multiple_subjects_allowed: true
+    duplicate_abuse_detection: recommended
+
+privacy_model:
+  raw_trace_disclosure:
+    required: false
+
+  default_storage:
+    raw_trace: private_or_external
+    trace_hash: public_or_verifiable
+    signature: public_or_verifiable
+    merkle_root: public_or_verifiable
+
+  privacy_preserving_methods:
+    - hash_only_record
+    - encrypted_trace_storage
+    - selective_disclosure
+    - zero_knowledge_proof_optional
+    - pseudonymous_subject_id
+
+zkp_extension:
+  status: optional
+  target_version: "0.2"
+  description: >
+    Zero-Knowledge Proof support is optional in v0.1.
+    Future versions may allow subjects to prove trace inclusion,
+    license validity, or claim eligibility without revealing
+    the trace itself, subject identity, or full metadata.
+
+  possible_proofs:
+    - prove_trace_inclusion_without_revealing_trace
+    - prove_valid_signature_without_revealing_public_metadata
+    - prove_license_validity_without_revealing_subject_identity
+    - prove_contribution_eligibility_without_disclosing_raw_log
+
+integration_with_kazene_royalty_os:
+  description: >
+    The Proof-of-Existence License Protocol provides the trust foundation
+    for Kazene Royalty OS / 印税OS.
+
+  mapping:
+    proof_of_existence_os:
+      role: 起源・主体・痕跡の真正性を保証する
+      outputs:
+        - verified_subject
+        - verified_trace
+        - verified_anchor
+        - verified_claim
+
+    kazene_royalty_os:
+      role: 価値・寄与・重み・分配可能性を計算する
+      inputs:
+        - verified_subject
+        - verified_trace
+        - verified_claim
+      outputs:
+        - contribution_score
+        - trace_weight
+        - royalty_eligibility
+        - q_coin_allocation
+
+  process_flow:
+    - Register subject.
+    - Issue Proof-of-Existence License.
+    - Sign trace hash.
+    - Anchor trace hash through Merkle Root.
+    - Verify subject and trace.
+    - Submit verified trace to Kazene Royalty OS.
+    - Estimate contribution.
+    - Calculate trace weight.
+    - Simulate royalty allocation.
+    - Record allocation result.
+
+minimal_example:
+  license_certificate:
+    license_id: "poel-license-001"
+    subject_id: "kazene-subject-001"
+    subject_type: "human"
+    public_key: "ed25519:example_public_key"
+    key_algorithm: "ed25519"
+    issued_at: "2026-04-25T00:00:00Z"
+    expires_at: null
+    issuer_id: "kazene-proof-of-existence-os"
+    issuer_signature: "ed25519:example_issuer_signature"
+    status: "active"
+
+  trace_record:
+    trace_id: "trace-001"
+    trace_type: "specification"
+    trace_hash: "sha256:example_trace_hash"
+    hash_algorithm: "sha256"
+    created_at: "2026-04-25T00:10:00Z"
+    signed_at: "2026-04-25T00:11:00Z"
+    signed_by: "kazene-subject-001"
+    license_id: "poel-license-001"
+    signature: "ed25519:example_trace_signature"
+    visibility: "hash_only"
+
+  merkle_anchor_record:
+    anchor_id: "anchor-001"
+    merkle_root: "sha256:example_merkle_root"
+    tree_algorithm: "binary_merkle_tree"
+    hash_algorithm: "sha256"
+    anchored_at: "2026-04-25T01:00:00Z"
+    ledger_type: "transparency_log"
+    ledger_ref: "ledger:example_reference"
+    included_trace_count: 128
+
+  claim:
+    claim_id: "claim-001"
+    claim_type: "contribution_claim"
+    subject_id: "kazene-subject-001"
+    license_id: "poel-license-001"
+    trace_id: "trace-001"
+    merkle_root: "sha256:example_merkle_root"
+    claim_status: "pending_verification"
+
+security_considerations:
+  - Private keys must be protected from leakage.
+  - Key compromise may affect trust in future traces.
+  - Hash-only records protect content but do not prove semantic value.
+  - Merkle anchoring proves inclusion, not truthfulness of content.
+  - Sybil resistance must be handled by identity or reputation layers.
+  - Legal recognition requires external institutional adoption.
+  - Royalty claims require separate contribution and allocation logic.
+  - Raw trace disclosure should remain optional by default.
+
+non_goals:
+  - This protocol does not define a cryptocurrency.
+  - This protocol does not require NFTs.
+  - This protocol does not require a public blockchain.
+  - This protocol does not determine legal authorship by itself.
+  - This protocol does not replace human judgment.
+  - This protocol does not calculate final royalties by itself.
+
+versioning:
+  current_version: "0.1"
+  compatibility: experimental
+  future_versions:
+    v0.2:
+      focus:
+        - zero_knowledge_proof_extension
+        - selective_disclosure
+        - private_claim_verification
+
+    v0.3:
+      focus:
+        - kazene_royalty_os_integration
+        - contribution_scoring_interface
+        - trace_weighting_interface
+
+    v0.4:
+      focus:
+        - ai_agent_integration
+        - github_or_copilot_style_trace_adapter
+        - automated_verification_workflows
+
+    v1.0:
+      focus:
+        - stable_protocol
+        - legal_mapping
+        - multi-issuer_interoperability
+        - production-grade_verification
+
+license_notice:
+  ja: >
+    本仕様は、存在・痕跡・起源・寄与を暗号的に証明するための
+    構造仕様であり、単独で法的権利を発生させるものではない。
+    法的効力を持たせるには、契約・規約・制度・司法判断との接続が必要である。
+
+  en: >
+    This specification defines a structural protocol for cryptographically
+    proving existence, traces, origins, and contribution.
+    It does not create legal rights by itself.
+    Legal effect requires integration with contracts, terms, institutions,
+    or applicable law.
