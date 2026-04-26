@@ -6,11 +6,13 @@ on:
       - ".github/workflows/validate-specs.yml"
       - "schema/**"
       - "examples/**"
+      - "tests/**"
   pull_request:
     paths:
       - ".github/workflows/validate-specs.yml"
       - "schema/**"
       - "examples/**"
+      - "tests/**"
   workflow_dispatch:
 
 jobs:
@@ -82,6 +84,6 @@ jobs:
           print(f"- Sample: {sample_path}")
           PY
 
-                - name: Run compliance tests
+      - name: Run compliance tests
         run: |
           python tests/run-compliance-tests.py
