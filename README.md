@@ -54,20 +54,26 @@ It only defines the trust layer that proves the existence, origin, and authentic
 
 ## Core Concept
 
-
 ```text
 Proof-of-Existence OS = proves subjects, origins, and traces
 Kazene Royalty OS     = evaluates contribution, weight, and allocation
+```
 
 In other words:
 
+```text
 存在証明OS = 起源の保証
 印税OS     = 価値の循環
+```
 
-The Proof-of-Existence License is not a payment mechanism.
+The Proof-of-Existence License is not a payment mechanism.  
 It is a cryptographic and structural certificate that allows later systems to evaluate verified traces.
 
-Layer Position
+---
+
+## Layer Position
+
+```text
 [ Kazene Royalty OS / 印税OS ]
   ├─ Contribution Estimation
   ├─ Trace Weighting
@@ -85,93 +91,174 @@ Layer Position
         ↑ cryptographic primitives
 
 [ Signature / Hash / Timestamp / Ledger Layer ]
-Protocol Layers
-1. Certificate Layer
+```
+
+---
+
+## Protocol Layers
+
+### 1. Certificate Layer
 
 Registers a subject and binds it to:
 
-subject_id
-public_key
-license_id
-issuer_signature
-status
-2. Signature Layer
+- `subject_id`
+- `public_key`
+- `license_id`
+- `issuer_signature`
+- `status`
+
+### 2. Signature Layer
 
 Allows the licensed subject to sign trace hashes.
 
 This proves that:
 
+```text
 this subject signed this trace hash at this time
-3. Anchor Layer
+```
+
+### 3. Anchor Layer
 
 Aggregates trace hashes into a Merkle Tree and records the Merkle Root in a ledger, timestamping service, transparency log, Git commit, or other tamper-resistant reference.
 
-4. Claim Layer
+### 4. Claim Layer
 
 Allows a licensed subject to make protocol-level claims, such as:
 
-contribution claim
-origin claim
-authorship claim
-royalty claim
-privacy-preserving claim
-5. Verification Layer
+- contribution claim
+- origin claim
+- authorship claim
+- royalty claim
+- privacy-preserving claim
+
+### 5. Verification Layer
 
 Allows third parties to verify:
 
-license validity
-issuer signature
-subject public key binding
-trace signature
-Merkle inclusion
-claim eligibility
-Repository Structure
+- license validity
+- issuer signature
+- subject public key binding
+- trace signature
+- Merkle inclusion
+- claim eligibility
+
+---
+
+## Repository Structure
+
+```text
 .
 ├── README.md
+├── CONTRIBUTING.md
+├── CHANGELOG.md
+├── SECURITY.md
+├── CITATION.cff
+├── LICENSE
 ├── spec/
 │   └── proof-of-existence-license-v0.1.yaml
 ├── schema/
 │   └── proof-of-existence-license-v0.1.schema.json
 ├── examples/
-│   └── proof-of-existence-license.sample.json
+│   ├── proof-of-existence-license.sample.json
+│   ├── pass/
+│   │   ├── valid-human-basic.json
+│   │   └── valid-ai-agent-git-anchor.json
+│   └── fail/
+│       ├── invalid-subject-type.json
+│       ├── missing-trace-signature.json
+│       └── invalid-hash-format.json
+├── tests/
+│   └── run-compliance-tests.py
+├── docs/
+│   └── one-page-overview.md
 └── .github/
     └── workflows/
         └── validate-specs.yml
-Main Files
-spec/proof-of-existence-license-v0.1.yaml
+```
+
+---
+
+## Main Files
+
+### `spec/proof-of-existence-license-v0.1.yaml`
 
 Human-readable protocol specification.
 
 This file defines:
 
-purpose
-scope
-architecture
-entities
-license certificate
-trace record
-Merkle anchor
-claim policy
-verification rules
-revocation policy
-recovery policy
-privacy model
-future roadmap
-schema/proof-of-existence-license-v0.1.schema.json
+- purpose
+- scope
+- architecture
+- entities
+- license certificate
+- trace record
+- Merkle anchor
+- claim policy
+- verification rules
+- revocation policy
+- recovery policy
+- privacy model
+- future roadmap
+
+### `schema/proof-of-existence-license-v0.1.schema.json`
 
 Machine-verifiable JSON Schema.
 
 This file validates whether a Proof-of-Existence License record follows the required v0.1 structure.
 
-examples/proof-of-existence-license.sample.json
+### `examples/proof-of-existence-license.sample.json`
 
 A minimal valid sample record.
 
 This file is used to test the schema locally and through GitHub Actions.
 
-.github/workflows/validate-specs.yml
+### `examples/pass/`
 
-GitHub Actions workflow that automatically validates the sample JSON against the schema.
+Valid compliance examples.
+
+Files in this directory must pass schema validation.
+
+### `examples/fail/`
+
+Invalid compliance examples.
+
+Files in this directory must fail schema validation.
+
+### `tests/run-compliance-tests.py`
+
+Compliance test runner.
+
+This script checks that:
+
+```text
+examples/pass/*.json must pass
+examples/fail/*.json must fail
+```
+
+### `docs/one-page-overview.md`
+
+A short overview document explaining the protocol, its purpose, layer model, validation flow, and roadmap.
+
+### `CONTRIBUTING.md`
+
+Contribution guidelines for improving the specification, schema, examples, and security model.
+
+### `CHANGELOG.md`
+
+Version history and planned roadmap.
+
+### `SECURITY.md`
+
+Security policy, threat model, reporting process, and known limitations.
+
+### `CITATION.cff`
+
+Citation metadata for referencing this specification.
+
+### `.github/workflows/validate-specs.yml`
+
+GitHub Actions workflow that validates the sample JSON and runs the compliance tests automatically.
+
 
 Core Record Model
 
