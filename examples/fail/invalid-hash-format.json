@@ -1,0 +1,60 @@
+{
+  "schema_version": "0.1",
+  "protocol": {
+    "id": "proof-of-existence-license-protocol",
+    "name": "Proof-of-Existence License Protocol",
+    "abbreviation": "PoEL",
+    "version": "0.1"
+  },
+  "license_certificate": {
+    "license_id": "poel-license-bad-hash-001",
+    "subject_id": "kazene-bad-hash-001",
+    "subject_type": "human",
+    "public_key": "ed25519:bad_hash_public_key_001",
+    "key_algorithm": "ed25519",
+    "issued_at": "2026-04-25T00:00:00Z",
+    "expires_at": null,
+    "issuer_id": "kazene-proof-of-existence-os",
+    "issuer_signature": "ed25519:issuer_signature_badhash_001",
+    "status": "active"
+  },
+  "trace_record": {
+    "trace_id": "trace-bad-hash-001",
+    "trace_type": "prompt",
+    "trace_hash": "sha256-badhashformat001",
+    "hash_algorithm": "sha256",
+    "created_at": "2026-04-25T00:10:00Z",
+    "signed_at": "2026-04-25T00:11:00Z",
+    "signed_by": "kazene-bad-hash-001",
+    "license_id": "poel-license-bad-hash-001",
+    "signature": "ed25519:trace_signature_badhash_001",
+    "visibility": "hash_only"
+  },
+  "merkle_anchor_record": {
+    "anchor_id": "anchor-bad-hash-001",
+    "merkle_root": "sha256:badhashmerkleroot001",
+    "tree_algorithm": "binary_merkle_tree",
+    "hash_algorithm": "sha256",
+    "anchored_at": "2026-04-25T01:00:00Z",
+    "ledger_type": "transparency_log",
+    "ledger_ref": "ledger:badhash-reference-001",
+    "included_trace_count": 1
+  },
+  "merkle_inclusion_proof": {
+    "trace_hash": "sha256:badhashtracehash001",
+    "merkle_root": "sha256:badhashmerkleroot001",
+    "proof_path": [
+      "sha256:badhashproofnode001"
+    ],
+    "proof_verified": true
+  },
+  "claim": {
+    "claim_id": "claim-bad-hash-001",
+    "claim_type": "privacy_preserving_claim",
+    "subject_id": "kazene-bad-hash-001",
+    "license_id": "poel-license-bad-hash-001",
+    "trace_id": "trace-bad-hash-001",
+    "merkle_root": "sha256:badhashmerkleroot001",
+    "claim_status": "pending_verification"
+  }
+}
